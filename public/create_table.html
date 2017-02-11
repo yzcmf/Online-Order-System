@@ -1,0 +1,50 @@
+<div class="row feed">
+    <div class="jumbotron">
+        <div class="container text-center">
+            <h1>Create your table</h1>
+        </div>
+    </div>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#/">Home</a></li>
+                    <li><a href="#!/create_table">Create table</a></li>
+                    <li><a href="#!/find_order">Find order</a></li>
+                    <li ng-show="currentUser"><a href="#!/bookings">View Bookings</a></li>
+                    <li ng-show="currentUser"><a href="#!/restaurant">Restaurant Information</a></li>
+                    <li ng-show="currentUser"><a href="#!/customer">Customer Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="col-md-4"></div>
+    <div class="col-md-6">
+        <div>
+            <form>
+            <br><br>
+            Name:  <input type="text" size="30" ng-model="name">
+            <br><br>
+            Date:  <input type="date" ng-model="date">
+            <br><br>
+            Time:  <input type="datetime" ng-model="time">
+            <br><br>
+            Party Size:  <input type="text" size="4" ng-model="size">
+            <br><br>
+            Phone:  <input type="text" size="20" ng-model="phone">
+            <br><br>
+            <button type="button" ng-click="Table()">Sumbit</button>
+            <br><br>
+            </form>
+            ConfirmationCode: {{code}}
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>

@@ -1,0 +1,84 @@
+<div class="row feed">
+    <div class="jumbotron">
+        <div class="container text-center">
+            <h1>customers contact information</h1>
+        </div>
+    </div>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#/">Home</a></li>
+                    <li><a href="#!/create_table">Create table</a></li>
+                    <li><a href="#!/find_order">Find order</a></li>
+                    <li ng-show="currentUser"><a href="#!/bookings">View Bookings</a></li>
+                    <li ng-show="currentUser"><a href="#!/restaurant">Restaurant Information</a></li>
+                    <li ng-show="currentUser"><a href="#!/customer">Customer Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="col-md-12">
+        <h1>ContactEditor</h1>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Party Size</th>
+                <th>Phone</th>
+                <th>Reservation Number</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><input class="form-control" ng-model="contact.name"></td>
+                <td><input class="form-control" type="date" ng-model="contact.date"></td>
+                <td><input class="form-control" ng-model="contact.time"></td>
+                <td><input class="form-control" ng-model="contact.size"></td>
+                <td><input class="form-control" ng-model="contact.phone"></td>
+                <td></td><!--<input class="form-control" ng-model="contact.ConfirmationCode">-->
+                <td><button class="btn btn-primary" ng-click="addContact()">Add Contact</button></td>
+                <td><button class="btn btn-info" ng-click="update()">Update</button></td>
+                <td><button class="btn btn-info" ng-click="deselect()">Clear</button></td>
+            </tr>
+            <tr ng-repeat="contact in contactlist">
+                <td>{{contact.name}}</td>
+                <td>{{contact.date}}</td>
+                <td>{{contact.time}}</td>
+                <td>{{contact.size}}</td>
+                <td>{{contact.phone}}</td>
+                <td>{{contact.ConfirmationCode}}</td>
+                <td><button class="btn btn-danger" ng-click="remove(contact._id)">Remove</button></td>
+                <td><button class="btn btn-warning" ng-click="edit(contact._id)">Edit</button></td>
+            </tr>
+            </tbody>
+        </table>
+        <h1>ContactLists</h1>
+        <div>
+            <h3 ng-repeat="contact in contacts|orderBy:['name','date','time']">
+                <!--make the same person in the same area by sorting the name-->
+                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                <form>
+                    <br><br>
+                    Name:  {{contact.name}}<br>
+                    Date:  {{contact.date}}<br>
+                    Time:  {{contact.time}}<br>
+                    Party Size:  {{contact.size}}<br>
+                    Phone:  {{contact.phone}}<br>
+                    ConfirmationCode:  {{contact.ConfirmationCode}}<br>
+                    <br><br>
+                </form>
+            </h3>
+        </div>
+    </div>
+</div>

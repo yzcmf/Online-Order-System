@@ -1,0 +1,79 @@
+<div class="row feed">
+    <div class="jumbotron">
+        <div class="container text-center">
+            <h1>Assign restaurant to customer</h1>
+        </div>
+    </div>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#/">Home</a></li>
+                    <li><a href="#!/create_table">Create table</a></li>
+                    <li><a href="#!/find_order">Find order</a></li>
+                    <li ng-show="currentUser"><a href="#!/bookings">View Bookings</a></li>
+                    <li ng-show="currentUser"><a href="#!/restaurant">Restaurant Information</a></li>
+                    <li ng-show="currentUser"><a href="#!/customer">Customer Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="col-md-4">
+        <div>
+            <form>
+                <br><br>
+                Reservation Number:  <input type="text" size="40" ng-model="CustomerId">
+                <br><br>
+                CustomerName:  <input type="text" size="20" ng-model="CustomerName">
+                <br><br>
+                CustomerDate:  <input type="date"  ng-model="CustomerDate">
+                <br><br>
+                CustomerTime:  <input type="time" size="20" ng-model="CustomerTime">
+                <br><br>
+                CustomerSize:  <input type="text" size="20" ng-model="CustomerSize">
+                <br><br>
+                CustomerPhone:  <input type="text" size="20" ng-model="CustomerPhone">
+                <br><br>
+                Restaurant Name:  <input type="text" size="20" ng-model="name">
+                <br><br>
+                Restaurant Email:  <input type="email" size="20" ng-model="email">
+                <br><br>
+                Restaurant Address:  <input type="text" size="20" ng-model="address">
+                <br><br>
+                Restaurant Phone:  <input type="text" size="20" ng-model="phone">
+                <br><br>
+                <button type="button" ng-click="Restaurant()">Assign</button>
+                <br><br>
+            </form>
+            <!--<h3 ng-repeat="restaurant in restaurants|orderBy:'CustomerId'">-->
+                <!--<span class="glyphicon glyphicon-user" aria-hidden="true"></span>-->
+                <!--<form>-->
+                    <!--Restaurant Name:  {{restaurant.name}}<br>-->
+                    <!--Restaurant Contact:  {{restaurant.contact}}<br>-->
+                    <!--Restaurant Email: {{restaurant.email}}<br>-->
+                    <!--Restaurant Address:   {{restaurant.address}}<br>-->
+                    <!--Restaurant Phone:  {{restaurant.phone}}<br>-->
+                    <!--<big>CustomerConfirmationCode:  {{restaurant.CustomerId}}</big><br>-->
+                    <!--Customer Name:  {{restaurant.CustomerName}}<br>-->
+                    <!--Customer Date:  {{restaurant.CustomerDate}}<br>-->
+                    <!--Customer Time: {{restaurant.CustomerTime}}<br>-->
+                    <!--Customer Size:   {{restaurant.CustomerSize}}<br>-->
+                    <!--Customer Phone:  {{restaurant.CustomerPhone}}<br>-->
+                <!--</form>-->
+                <!--<a href ng-click="removeRestaurant(restaurant)">-->
+                    <!--<span class="glyphicon glyphicon-remove" aria-hidden="true">Delete</span>-->
+                <!--</a>-->
+            <!--</h3>-->
+        </div>
+    </div>
+    <div class="col-md-8">
+        <iframe src="https://www.yelp.com/search?find_desc=Restaurants+With+Private+Rooms&find_loc=New+York%2C+NY" height=800px width=100%></iframe>
+    </div>
+</div>

@@ -1,1 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="Yuxuan">
+<head>
+    <meta charset="UTF-8">
+    <title>Yuxuan</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="angular.min.js"></script>
+    <script type="text/javascript" src="angular-route.js"></script>
+    <script type="text/javascript" src="angular-cookies.js"></script>
+    <script type="text/javascript">
+        var app = angular.module('Yuxuan', ['ngRoute', 'ngCookies']);
 
+        app.run(function ($rootScope, $cookies) {
+            if ($cookies.get('token') && $cookies.get('currentUser')) {
+                $rootScope.token = $cookies.get('token');
+                $rootScope.currentUser = $cookies.get('currentUser');
+            }
+        });
+
+        app.config(function ($routeProvider, $locationProvider) {
+            $routeProvider
+                .when('/', {
+                    templateUrl: 'home.html',
+                    controller: 'HomeController'
+                }).when('/create_table', {
+                templateUrl: 'create_table.html',
+                controller: 'TableController'
+            }).when('/find_order', {
+                templateUrl: 'find_order.html',
+                controller: 'OrderController'
+            }).when('/bookings', {
+                templateUrl: 'bookings.html',
+                controller: 'BookingController'
+            }).when('/customer', {
+                templateUrl: 'customer.html',
+                controller: 'CustomerController'
+            }).when('/restaurant', {
+                templateUrl: 'restaurant.html',
+                controller: 'RestaurantController'
+            }).when('/signup', {
+                templateUrl: 'signup.html',
+                controller: 'SignupController'
+            })
+        });
+
+        app.controller('HomeController', function ($rootScope, $scope, $http, $cookies) {
+            $scope.submitNewMeow = function () {
+                //console.log($scope.newMeow);
+                $http.post('/meows', {newMeow: $scope.newMeow},
+                    {
+                        headers: {
+                            'authorization': $rootScope.token
+                        }
+                    }).then(function () {
+                    getMeows();
+                    $scope.newMeow = '';
+                    //alert('success!');
+                });
+            };
+
+            $scope.removeMeow = function (meow) {
+                $http.put('/meows/remove',
+                    {meow: meow},
+                    {
+                        headers: {
+                            'authorization': $rootScope.token
+                        }
+                    }).then(function () {
+                    getMeows();
+                    //alert('success!');
+                });
+            };
+
+            $scope.signin = function () {
+                $http.put('/users/signin', {username: $scope.username, password: $scope.password})
+                    .then(function (res) {
+                        $cookies.put('token', res.data.token);
+                        $cookies.put('currentUser', $scope.username);
+                        $rootScope.token = res.data.token;
+                        $rootScope.currentUser = $scope.username;
+                        alert('success signed in!');
+                    }, function (err) {
+                        alert('bad login credentials');
+                    });
+            };
+
+            $scope.logout = function () {
+                $cookies.remove('token');
+                $cookies.remove('currentUser');
+                $rootScope.token = null;
+                $rootScope.currentUser = null;
+            };
+
+            function getMeows() {
+                $http.get('/meows').then(function (response) {
+                    $scope.meows = response.data;
+                });
+            }
+
+            getMeows();
+        });
+
+        <!--  create the table  -->
+        app.controller('TableController', function ($rootScope, $scope, $http) {
+
+            $scope.Table = function () {
+
+                var table = {
+                    name: $scope.name,
+                    date: $scope.date,
+                    time: $scope.time,
+                    size: $scope.size,
+                    phone: $scope.phone,
+                }
+
+                console.log($scope.name);
+                $http.post('/table', table
+                ).then(function () {
+                    getConfirmationCode();
+                    alert('post success!');
+                });
+            };
+
+            function getConfirmationCode() {
+                $http.get('/table').then(function (response) {
+                    alert('brower get success!');
+                    var arr = response.data;
+                    $scope.code = arr[arr.length - 1]._id;
+                });
+            }
+        });
+        <!--  create the table  end -->
+
+        <!--  Find the order -->
+        app.controller('OrderController', function ($rootScope, $scope, $http) {
+            $scope.Order = function () {
+
+                var CustomerId = $scope.code;
+                //console.log(CustomerId);
+
+//                function getInfo() {
+//                    $http.get('/table').then(function (response) {
+//                        alert('get table success!');
+//                        var arr = response.data;
+//                        var i;
+//                        //find the right id using the loop; note: response delay, length+1;
+//                        for (i = 0; i < arr.length + 1; i++) {
+//                            //console.log(i);
+//                            console.log(arr[i]._id);
+//                            if (CustomerId == arr[i]._id) {
+//                                $scope.CustomerName = arr[i].name;
+//                                $scope.CustomerDate= arr[i].date;
+//                                $scope.CustomerTime = arr[i].time;
+//                                $scope.CustomerSize= arr[i].size;
+//                                $scope.CustomerPhone = arr[i].phone;
+//                                alert('Your info has been checked successfully!');
+//                                break;
+//                            }
+//                        }
+//                    });
+//                }
+
+                function getOrder() {
+
+                    $http.get('/restaurant').then(function (response) {
+                        alert('get restaurant success!');
+                        var arr = response.data;
+                        var i;
+                        //find the right id using the loop; note: response delay, length+1;
+                        for (i = 0; i < arr.length + 1; i++) {
+                            //console.log(i);
+                            if (CustomerId == arr[i].CustomerId) {
+                                //$scope.list = arr[i];
+                                $scope.id = arr[i]._id;
+                                $scope.name = arr[i].name;
+                                $scope.email = arr[i].email;
+                                $scope.address = arr[i].address;
+                                $scope.phone = arr[i].phone;
+                                $scope.CustomerName = arr[i].CustomerName;
+                                $scope.CustomerDate= arr[i].CustomerDate;
+                                $scope.CustomerTime = arr[i].CustomerTime;
+                                $scope.CustomerSize= arr[i].CustomerSize;
+                                $scope.CustomerPhone = arr[i].CustomerPhone;
+                                alert('Your order has been assigned successfully!');
+                                break;
+                            }
+                        }
+                    });
+                }
+
+                getOrder();
+            };
+
+            var id = $scope.id;
+            $scope.WithDraw = function(id) {
+                console.log("The restaurant id is: " + id);
+                $http.delete('/restaurant/' + id).then(function(response) {
+                    alert('WithDraw Success!');
+                });
+            };
+
+
+//            $scope.WithDraw = function (id) {
+//                var id = $scope.id;
+//                console.log(id);
+//                $http.get('/restaurant').then(function (response) {
+//                    alert('brower get success!');
+//                    var arr = response.data;
+//                    var i;
+//                    //find the right id using the loop; note: response delay, length+1;
+//                    for (i = 0; i < arr.length + 1; i++) {
+//                        //console.log(i);
+//                        if (id == arr[i]._id) {
+//                            //console.log(id);
+//                            $http.delete('/restaurant/' + id).then(function () {
+//                                alert('WithDraw Success!');
+//                            });
+//                            break;
+//                        }
+//                    }
+//                })
+//            };
+
+        });
+        <!--  Find the order end -->
+
+        <!--  booking lists -->
+
+        app.controller('BookingController', function ($rootScope, $scope, $http) {
+            $scope.removeBooking = function (booking) {
+                $http.put('/restaurant/remove',
+                    {booking: booking})
+                    .then(function () {
+                        getBookings();
+                        alert('Booking Cancelled successfully!');
+                    });
+            };
+
+            function getBookings() {
+                $http.get('/restaurant').then(function (response) {
+                    $scope.bookings = response.data;
+                });
+            }
+
+            getBookings();
+        });
+
+        <!--  booking lists end -->
+
+        <!--  Restaurant Information lists-->
+
+        app.controller('RestaurantController', function ($rootScope, $scope, $http) {
+
+            $scope.Restaurant = function () {
+
+                var Restaurant = {
+                    name: $scope.name,
+                    email: $scope.email,
+                    address: $scope.address,
+                    phone: $scope.phone,
+                    CustomerId: $scope.CustomerId,
+                    CustomerName: $scope.CustomerName,
+                    CustomerDate: $scope.CustomerDate,
+                    CustomerTime: $scope.CustomerTime,
+                    CustomerSize: $scope.CustomerSize,
+                    CustomerPhone: $scope.CustomerPhone
+                }
+
+                console.log($scope.name);
+                $http.post('/restaurant', Restaurant
+                ).then(function () {
+                    alert('post success!');
+                });
+            };
+
+            $scope.removeRestaurant = function (restaurant) {
+                $http.put('/restaurant/remove',
+                    {restaurant: restaurant})
+                    .then(function () {
+                        getrestaurants();
+                        alert('Delete success!');
+                    });
+            };
+
+            function getrestaurants() {
+                $http.get('/restaurant').then(function (response) {
+                    $scope.restaurants = response.data;
+                });
+            }
+
+            getrestaurants();
+
+        });
+
+        <!--  Restaurant Information lists end-->
+
+
+
+
+        <!--  Contact lists-->
+
+        app.controller('CustomerController', ['$scope', '$http', function ($scope, $http) {
+            function getContact() {
+                $http.get('/table').then(function (response) {
+                    $scope.contacts = response.data;
+                });
+            }
+
+            getContact();
+
+            console.log("Hello World from controller");
+
+            var refresh = function () {
+                $http.get('/table').then(function (response) {
+                    $scope.contactlist = response.data;//add .data when using the MongoClient
+                    console.log("The data I got are:" + $scope.contactlist);
+                    //$scope.contact = "";
+                });
+            };
+
+            refresh();
+
+            $scope.addContact = function () {
+                console.log($scope.contact);
+                $http.post('/table', $scope.contact).then(function (response) {
+                    console.log(response);
+                    console.log("The data sent to the server are:" + response);
+                    refresh();
+                });
+            };
+
+            $scope.remove = function (id) {
+                console.log(id);
+                $http.delete('/table/' + id).then(function (response) {
+                    refresh();
+                });
+            };
+
+            $scope.edit = function (id) {
+                console.log(id);
+                $http.get('/table/' + id).then(function (response) {
+                    $scope.contact = response.data;//add .data when using the MongoClient
+                });
+            };
+
+            $scope.update = function () {
+                console.log($scope.contact._id);
+                $http.put('/table/' + $scope.contact._id, $scope.contact).then(function (response) {
+                    refresh();
+                })
+            };
+
+            $scope.deselect = function () {
+                $scope.contact = "";
+            }
+        }]);
+
+        <!--  Contact lists end-->
+
+        <!--  sign up  -->
+
+        app.controller('SignupController', function ($scope, $http) {
+            $scope.submitSignup = function () {
+                var newUser = {
+                    username: $scope.username,
+                    password: $scope.password
+                };
+                $http.post('/users', newUser).then(function () {
+                    alert('success!');
+                });
+            }
+        });
+
+        <!--  sign up  end -->
+    </script>
+</head>
+<body>
+<!--<h1 class="page-title"><a href="#/">Yuxuan</a></h1>-->
+<div ng-view></div>
+</body>
+</html>
+
+<!--mac 下 webstorm 格式化代码的快捷键 Option+Command+l-->
+<!--ng-controller="YZ"-->
+<!--Good reference:https://www.youtube.com/watch?v=tcK-7MFWEiY&list=PLZrs7Z81U28WYp_uuTe9bcCd0ohBwKrwy&index=12-->
+<!--username:yzcmf1994@gmail.com-->
+<!--password:123456-->

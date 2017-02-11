@@ -1,0 +1,66 @@
+<div class="row feed">
+    <div class="jumbotron">
+        <div class="container text-center">
+            <h1>Yuxuan's Restaurant OnlineOrder</h1>
+        </div>
+    </div>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <!--<a class="navbar-brand" href="#">Logo</a>-->
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#/">Home</a></li>
+                    <li><a href="#!/create_table">Create table</a></li>
+                    <li><a href="#!/find_order">Find order</a></li>
+                    <li ng-show="currentUser"><a href="#!/bookings">View Bookings</a></li>
+                    <li ng-show="currentUser"><a href="#!/restaurant">Restaurant Information</a></li>
+                    <li ng-show="currentUser"><a href="#!/customer">Customer Contact</a></li>
+                </ul>
+                <!--<ul class="nav navbar-nav navbar-right">-->
+                <!--<li><a href="#"><span class="glyphicon glyphicon-user"></span> Your Account</a></li>-->
+                <!--<li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>-->
+                <!--</ul>-->
+            </div>
+        </div>
+    </nav>
+    <div class="col-md-6">
+        <div ng-hide="currentUser">
+            Login:
+            <br><br>
+            <input type="email" size="30" placeholder="Email" ng-model="username">
+            <br><br>
+            <input type="password" size="30" placeholder="Password" ng-model="password">
+            <br><br>
+            <button type="button" ng-click="signin()">Sign In</button>
+            <br><br>
+            <!--<a href="#!/signup">Not a member? signup</a>-->
+        </div>
+        <div ng-show="currentUser">
+            Hello,{{currentUser}}.
+            <br><br>
+            <a href ng-click="logout()">Logout</a>
+        </div>
+    </div>
+    <div class="col-md-6" ng-show="currentUser">
+        <!--<div class="new-meow">-->
+        <!--<input type="text" class="form-control" ng-model="newMeow" placeholder="what do you want to order today?">-->
+        <!--<button class="btn" type="button" ng-click="submitNewMeow()">Submit</button>-->
+        <!--</div>-->
+        <!--<h3 ng-repeat="meow in meows">-->
+            <!--<span class="glyphicon glyphicon-user" aria-hidden="true"></span>-->
+            <!--{{meow.text}}-->
+            <!--<a href ng-click="removeMeow(meow)">-->
+                <!--<span class="glyphicon glyphicon-remove" aria-hidden="true">Delete</span>-->
+            <!--</a>-->
+            <!--<br>-->
+            <!--<small>{{meow.username}}</small>-->
+        <!--</h3>-->
+    </div>
+</div>
